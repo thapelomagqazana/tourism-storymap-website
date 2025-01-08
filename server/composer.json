@@ -1,0 +1,24 @@
+{
+    "name": "thapelo/server",
+    "description": "A tourism story map website API",
+    "type": "project",
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "firebase/php-jwt": "^6.10",
+        "phpunit/phpunit": "*",
+        "squizlabs/php_codesniffer": "^2.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Thapelo\\Server\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Thapelo",
+            "email": "tapsmcgzee8@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
