@@ -4,7 +4,14 @@ import com.tourism.tourism_backend.dto.LoginRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
 import com.tourism.tourism_backend.models.User;
 import com.tourism.tourism_backend.services.AuthService;
+import com.tourism.tourism_backend.services.TokenBlacklistService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +57,32 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\"error\": \"Invalid email or password\"}");
         }
+    }
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
+
+    /**
+     * Logs out the user by blacklisting the token.
+     *
+     * @param request the HTTP request containing the authorization header.
+     * @return a ResponseEntity with a success message.
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid or missing token"));
+        }
+        
+
+        // Extract the token from the Authorization header
+        String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
+
+        // Blacklist the token
+        tokenBlacklistService.blacklistToken(token);
+
+        return ResponseEntity.ok(Map.of("message", "User logged out successfully"));
     }
 }
 

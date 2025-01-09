@@ -25,7 +25,7 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 // Permit all requests to the user registration endpoint without authentication.
-                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers("/api/users/register", "/api/users/login", "/api/users/logout").permitAll()
                 // Require authentication for all other requests.
                 .anyRequest().authenticated()
             );
