@@ -32,6 +32,19 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
+    // Default constructor
+    public User() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // Constructor with parameters (name, email, password)
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.createdAt = LocalDateTime.now();
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -63,5 +76,27 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+    
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", name='" + name + '\'' + ", email='" + email + '\'' + ", createdAt=" + createdAt + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id != null && id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

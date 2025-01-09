@@ -1,5 +1,6 @@
 package com.tourism.tourism_backend.controllers;
 
+import com.tourism.tourism_backend.dto.LoginRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
 import com.tourism.tourism_backend.models.User;
 import com.tourism.tourism_backend.services.AuthService;
@@ -31,6 +32,24 @@ public class AuthController {
 
         // Return the registered user in the response
         return ResponseEntity.ok(registeredUser);
+    }
+
+    /**
+     * Logs in a user and returns a JWT token on successful authentication.
+     *
+     * @param loginRequest the login request containing email and password
+     * @return a ResponseEntity with a JWT token or an error message
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        try {
+            String token = authService.authenticateUser(loginRequest);
+            return ResponseEntity.ok("{\"token\": \"" + token + "\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("{\"error\": \"" + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"error\": \"Invalid email or password\"}");
+        }
     }
 }
 
