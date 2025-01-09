@@ -22,7 +22,7 @@ public class UserDTO {
 
     // Getters and Setters
     public String getName() {
-        return name;
+        return name != null ? name.trim() : null;
     }
 
     public void setName(String name) {
@@ -30,7 +30,7 @@ public class UserDTO {
     }
 
     public String getEmail() {
-        return email;
+        return email != null ? email.trim() : null;
     }
 
     public void setEmail(String email) {
@@ -38,7 +38,7 @@ public class UserDTO {
     }
 
     public String getPassword() {
-        return password;
+        return password != null ? password.trim() : null;
     }
 
     public void setPassword(String password) {
