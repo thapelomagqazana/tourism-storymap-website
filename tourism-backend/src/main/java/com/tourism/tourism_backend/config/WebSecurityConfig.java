@@ -11,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.tourism.tourism_backend.filters.JwtFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,10 +40,14 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 // Permit all requests to the user registration endpoint without authentication.
-                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers("/api/users/register", "/api/users/login", "/api/attractions").permitAll()
                 .requestMatchers( "/api/users/logout", "/api/users/profile").authenticated()
                 // Require authentication for all other requests.
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(exception -> exception
+            .authenticationEntryPoint((request, response, authException) -> 
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required"))
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())); // Ensure JWT is used for authentication;
