@@ -2,23 +2,17 @@ package com.tourism.tourism_backend.controllers;
 
 import com.tourism.tourism_backend.dto.LoginRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
-import com.tourism.tourism_backend.exceptions.UserNotFoundException;
 import com.tourism.tourism_backend.models.AppUser;
 import com.tourism.tourism_backend.services.AuthService;
 import com.tourism.tourism_backend.services.TokenBlacklistService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
-import java.security.Principal;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -88,23 +82,6 @@ public class AuthController {
         tokenBlacklistService.blacklistToken(token);
 
         return ResponseEntity.ok(Map.of("message", "User logged out successfully"));
-    }
-
-    /**
-     * Retrieves the profile of the logged-in user.
-     *
-     * @param principal the authenticated user details.
-     * @return a ResponseEntity containing the user's profile data.
-     */
-    @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile(Principal principal) {
-        try {
-            // Use the principal (authenticated user's email) to get the user profile
-            UserDTO userProfile = authService.getUserProfile(principal.getName());
-            return ResponseEntity.ok(userProfile);
-        } catch (UserNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"User not found\"}");
-        }
     }
 }
 

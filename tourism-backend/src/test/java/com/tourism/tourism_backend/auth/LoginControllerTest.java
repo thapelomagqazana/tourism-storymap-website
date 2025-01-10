@@ -1,4 +1,4 @@
-package com.tourism.tourism_backend;
+package com.tourism.tourism_backend.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourism.tourism_backend.dto.LoginRequest;

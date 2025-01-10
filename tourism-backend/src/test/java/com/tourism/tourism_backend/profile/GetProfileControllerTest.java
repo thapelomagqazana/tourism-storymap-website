@@ -1,4 +1,4 @@
-package com.tourism.tourism_backend;
+package com.tourism.tourism_backend.profile;
 
 import com.tourism.tourism_backend.dto.LoginRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProfileControllerTest {
+public class GetProfileControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

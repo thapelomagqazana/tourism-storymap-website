@@ -30,6 +30,12 @@ public class UserDTO {
         this.email = email;
     }
 
+    public UserDTO(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     // Getters and Setters
     public String getName() {
         return name != null ? name.trim() : null;

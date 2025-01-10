@@ -1,6 +1,7 @@
 package com.tourism.tourism_backend.services;
 
 import com.tourism.tourism_backend.dto.LoginRequest;
+import com.tourism.tourism_backend.dto.ProfileUpdateRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
 import com.tourism.tourism_backend.exceptions.EmailAlreadyExistsException;
 import com.tourism.tourism_backend.exceptions.InvalidCredentialsException;
@@ -97,6 +98,58 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
         // Map the User entity to UserDTO (excluding sensitive fields)
+        return new UserDTO(user.getName(), user.getEmail());
+    }
+
+    /**
+     * Updates the profile of a logged-in user.
+     *
+     * @param email              the email of the logged-in user
+     * @param profileUpdateRequest the profile update request containing new details
+     * @return the updated UserDTO
+     * @throws UserNotFoundException if the user is not found
+     */
+    @Transactional
+    public UserDTO updateUserProfile(String email, ProfileUpdateRequest profileUpdateRequest) {
+        // Find the user by email
+        AppUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+
+        if (!user.getEmail().equals(profileUpdateRequest.getEmail()) && userRepository.findByEmail(profileUpdateRequest.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Email is already in use");
+        }
+
+        if ((profileUpdateRequest.getName() == null || profileUpdateRequest.getName().trim().isEmpty()) &&
+            (profileUpdateRequest.getEmail() == null || profileUpdateRequest.getEmail().trim().isEmpty()) &&
+            (profileUpdateRequest.getPassword() == null || profileUpdateRequest.getPassword().trim().isEmpty())) {
+            throw new IllegalArgumentException("At least one field is required");
+        }
+
+        if (profileUpdateRequest.getEmail() != null && !profileUpdateRequest.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
+        if (profileUpdateRequest.getPassword() != null && profileUpdateRequest.getPassword().length() < 8) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long");
+        }        
+
+        // Update fields only if they are provided
+        if (profileUpdateRequest.getName() != null && !profileUpdateRequest.getName().trim().isEmpty()) {
+            user.setName(profileUpdateRequest.getName().trim());
+        }
+
+        if (profileUpdateRequest.getEmail() != null && !profileUpdateRequest.getEmail().trim().isEmpty()) {
+            user.setEmail(profileUpdateRequest.getEmail().trim());
+        }
+
+        if (profileUpdateRequest.getPassword() != null && !profileUpdateRequest.getPassword().trim().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(profileUpdateRequest.getPassword()));
+        }
+
+        // Save the updated user
+        userRepository.save(user);
+
+        // Return the updated profile as a DTO
         return new UserDTO(user.getName(), user.getEmail());
     }
 }
