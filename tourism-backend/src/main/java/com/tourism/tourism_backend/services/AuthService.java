@@ -4,7 +4,8 @@ import com.tourism.tourism_backend.dto.LoginRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
 import com.tourism.tourism_backend.exceptions.EmailAlreadyExistsException;
 import com.tourism.tourism_backend.exceptions.InvalidCredentialsException;
-import com.tourism.tourism_backend.models.User;
+import com.tourism.tourism_backend.exceptions.UserNotFoundException;
+import com.tourism.tourism_backend.models.AppUser;
 import com.tourism.tourism_backend.repositories.UserRepository;
 import com.tourism.tourism_backend.util.JwtUtil;
 
@@ -36,14 +37,14 @@ public class AuthService {
      * @throws IllegalArgumentException if the email is already in use
      */
     @Transactional
-    public User registerUser(UserDTO userDTO) {
+    public AppUser registerUser(UserDTO userDTO) {
         // Check if the email is already in use
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Email is already in use");
         }
 
         // Create a new User entity and populate fields
-        User user = new User();
+        AppUser user = new AppUser();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         // Hash the password before storing it
@@ -71,7 +72,7 @@ public class AuthService {
         }
     
         // Find user by email (trim email for comparison)
-        User user = userRepository.findByEmail(loginRequest.getEmail().trim())
+        AppUser user = userRepository.findByEmail(loginRequest.getEmail().trim())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
     
         // Validate password (no trimming or alteration of input password)
@@ -81,5 +82,17 @@ public class AuthService {
     
         // Generate and return JWT token
         return jwtUtil.generateToken(user.getEmail());
+    }
+
+    /**
+     * Retrieves the profile of a user by their email.
+     *
+     * @param email the email of the user
+     * @return the User entity
+     * @throws UserNotFoundException if no user is found with the given email
+     */
+    public AppUser getUserProfile(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }

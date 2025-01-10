@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +33,12 @@ public class User {
     }
 
     // Default constructor
-    public User() {
+    public AppUser() {
         this.createdAt = LocalDateTime.now();
     }
 
     // Constructor with parameters (name, email, password)
-    public User(String name, String email, String password) {
+    public AppUser(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -91,7 +91,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        AppUser user = (AppUser) o;
         return id != null && id.equals(user.id);
     }
 

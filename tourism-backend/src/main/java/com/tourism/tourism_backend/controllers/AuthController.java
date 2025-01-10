@@ -2,7 +2,8 @@ package com.tourism.tourism_backend.controllers;
 
 import com.tourism.tourism_backend.dto.LoginRequest;
 import com.tourism.tourism_backend.dto.UserDTO;
-import com.tourism.tourism_backend.models.User;
+import com.tourism.tourism_backend.dto.UserProfileResponse;
+import com.tourism.tourism_backend.models.AppUser;
 import com.tourism.tourism_backend.services.AuthService;
 import com.tourism.tourism_backend.services.TokenBlacklistService;
 
@@ -14,6 +15,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,9 +36,9 @@ public class AuthController {
      * @return a ResponseEntity containing the registered user
      */
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<AppUser> registerUser(@Valid @RequestBody UserDTO userDTO) {
         // Call the service method to register the user
-        User registeredUser = authService.registerUser(userDTO);
+        AppUser registeredUser = authService.registerUser(userDTO);
 
         // Return the registered user in the response
         return ResponseEntity.ok(registeredUser);
@@ -83,6 +86,25 @@ public class AuthController {
         tokenBlacklistService.blacklistToken(token);
 
         return ResponseEntity.ok(Map.of("message", "User logged out successfully"));
+    }
+
+    /**
+     * Endpoint to retrieve the profile of the logged-in user.
+     *
+     * @param userDetails the authenticated user's details (email extracted from JWT).
+     * @return a ResponseEntity containing user profile data (name, email).
+     */
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileResponse> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            throw new IllegalArgumentException("UserDetails cannot be null");
+        }
+        // Retrieve the user's profile using the email from UserDetails
+        AppUser user = authService.getUserProfile(userDetails.getUsername());
+
+        // Create and return the response DTO
+        UserProfileResponse response = new UserProfileResponse(user.getName(), user.getEmail());
+        return ResponseEntity.ok(response);
     }
 }
 

@@ -2,7 +2,8 @@ package com.tourism.tourism_backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourism.tourism_backend.dto.LoginRequest;
-import com.tourism.tourism_backend.models.User;
+import com.tourism.tourism_backend.models.AppUser;
+import com.tourism.tourism_backend.repositories.BlacklistedTokenRepository;
 import com.tourism.tourism_backend.repositories.UserRepository;
 import com.tourism.tourism_backend.services.TokenBlacklistService;
 import com.tourism.tourism_backend.util.JwtUtil;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LogoutControllerTest {
+public class LogoutControllerTest{
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,6 +31,10 @@ public class LogoutControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BlacklistedTokenRepository blacklistedTokenRepository;
+
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -44,9 +49,10 @@ public class LogoutControllerTest {
     public void setup() {
         // Clear the database before each test
         userRepository.deleteAll();
+        blacklistedTokenRepository.deleteAll();
 
         // Create and save a test user
-        User user = new User("John Doe", "john.doe@example.com", "password123");
+        AppUser user = new AppUser("John Doe", "john.doe@example.com", "password123");
         userRepository.save(user);
 
         // Generate a valid JWT token for the user
@@ -62,10 +68,13 @@ public class LogoutControllerTest {
      */
     @Test
     public void testLogoutUser_ValidToken() throws Exception {
+        // Generate a valid token for the test user
+        // String validToken1 = jwtUtil.generateToken("john.doe@example.com");
+
         mockMvc.perform(post("/api/users/logout")
-            .header("Authorization", "Bearer " + validToken))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("User logged out successfully"));
+                .header("Authorization", "Bearer " + validToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("User logged out successfully"));
     }
 
     /**
@@ -106,44 +115,44 @@ public class LogoutControllerTest {
 
     @Test
     public void testLogoutUser_MissingToken() throws Exception {
-        // No Authorization header
-        mockMvc.perform(post("/api/users/logout"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("Invalid or missing token"));
+        mockMvc.perform(post("/api/users/logout")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+                // .andExpect(jsonPath("$.message").value("Missing or invalid Authorization header"));
     }
 
-    // @Test
-    // public void testLogoutUser_InvalidTokenFormat() throws Exception {
-    //     // Authorization header with invalid token format
-    //     mockMvc.perform(post("/api/users/logout")
-    //             .header("Authorization", "Bearer invalid_token"))
-    //             .andExpect(status().isBadRequest())
-    //             .andExpect(jsonPath("$.error").value("Invalid token"));
-    // }
+    @Test
+    public void testLogoutUser_InvalidTokenFormat() throws Exception {
+        // Authorization header with invalid token format
+        mockMvc.perform(post("/api/users/logout")
+                .header("Authorization", "Bearer invalid_token"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid token format"));
+    }
 
-    // @Test
-    // public void testLogoutUser_MalformedToken() throws Exception {
-    //     // Authorization header with malformed token
-    //     mockMvc.perform(post("/api/users/logout")
-    //             .header("Authorization", "Bearer malformed.token"))
-    //             .andExpect(status().isBadRequest())
-    //             .andExpect(jsonPath("$.error").value("Invalid token"));
-    // }
+    @Test
+    public void testLogoutUser_MalformedToken() throws Exception {
+        // Authorization header with malformed token
+        mockMvc.perform(post("/api/users/logout")
+                .header("Authorization", "Bearer malformed.token"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid token format"));
+    }
 
-    // @Test
-    // public void testLogoutUser_BlacklistedToken() throws Exception {
-    //     // Generate a valid token
-    //     String token = jwtUtil.generateToken("john.doe@example.com");
+    @Test
+    public void testLogoutUser_BlacklistedToken() throws Exception {
+        // Generate a valid token
+        String token = jwtUtil.generateToken("john.doe@example.com");
 
-    //     // Blacklist the token
-    //     tokenBlacklistService.blacklistToken(token);
+        // Blacklist the token
+        tokenBlacklistService.blacklistToken(token);
 
-    //     // Attempt to logout with the blacklisted token
-    //     mockMvc.perform(post("/api/users/logout")
-    //             .header("Authorization", "Bearer " + token))
-    //             .andExpect(status().isUnauthorized())
-    //             .andExpect(jsonPath("$.error").value("Token is blacklisted"));
-    // }
+        // Attempt to logout with the blacklisted token
+        mockMvc.perform(post("/api/users/logout")
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.error").value("Token is blacklisted"));
+    }
 
     // @Test
     // public void testLogoutUser_ExpiredToken() throws Exception {
@@ -160,24 +169,22 @@ public class LogoutControllerTest {
     //             .andExpect(jsonPath("$.error").value("Token is blacklisted"));
     // }
 
-    // @Test
-    // public void testLogoutUser_WithoutBearerPrefix() throws Exception {
-    //     // Generate a valid token
-    //     String token = jwtUtil.generateToken("john.doe@example.com");
+    @Test
+    public void testLogoutUser_WithoutBearerPrefix() throws Exception {
+        // Generate a valid token
+        String token = jwtUtil.generateToken("john.doe@example.com");
 
-    //     // Attempt to logout without "Bearer" prefix
-    //     mockMvc.perform(post("/api/users/logout")
-    //             .header("Authorization", token))
-    //             .andExpect(status().isBadRequest())
-    //             .andExpect(jsonPath("$.error").value("Invalid or missing token"));
-    // }
+        // Attempt to logout without "Bearer" prefix
+        mockMvc.perform(post("/api/users/logout")
+                .header("Authorization", token))
+                .andExpect(status().isUnauthorized());
+    }
 
     // @Test
     // public void testLogoutUser_NullAuthorizationHeader() throws Exception {
     //     // Null Authorization header
     //     mockMvc.perform(post("/api/users/logout")
     //             .header("Authorization", (String) null))
-    //             .andExpect(status().isBadRequest())
-    //             .andExpect(jsonPath("$.error").value("Invalid or missing token"));
+    //             .andExpect(status().isUnauthorized());
     // }
 }

@@ -1,5 +1,6 @@
 package com.tourism.tourism_backend.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
@@ -59,4 +60,19 @@ public class JwtUtil {
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    /**
+     * Parses the JWT token and extracts claims.
+     *
+     * @param token the JWT token
+     * @return the claims contained in the token
+     */
+    public Claims getClaimsFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(signingKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
 }

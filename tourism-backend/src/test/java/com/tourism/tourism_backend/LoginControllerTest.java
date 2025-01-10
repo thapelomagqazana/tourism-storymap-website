@@ -2,7 +2,7 @@ package com.tourism.tourism_backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourism.tourism_backend.dto.LoginRequest;
-import com.tourism.tourism_backend.models.User;
+import com.tourism.tourism_backend.models.AppUser;
 import com.tourism.tourism_backend.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LoginControllerTest {
+public class LoginControllerTest{
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,8 +35,8 @@ public class LoginControllerTest {
     public void setup() {
         userRepository.deleteAll();
         // Prepopulate users for test cases
-        userRepository.save(new User("John Doe", "john.doe@example.com", passwordEncoder.encode("password123")));
-        userRepository.save(new User("Secure User", "secure.user@example.com", passwordEncoder.encode("P@ssw0rd#123")));
+        userRepository.save(new AppUser("John Doe", "john.doe@example.com", passwordEncoder.encode("password123")));
+        userRepository.save(new AppUser("Secure User", "secure.user@example.com", passwordEncoder.encode("P@ssw0rd#123")));
     }
 
     /**
@@ -106,7 +106,7 @@ public class LoginControllerTest {
     @Test
     public void testLoginUser_AfterRegistration() throws Exception {
         // Register a new user
-        User newUser = new User("New User", "new.user@example.com", passwordEncoder.encode("password123"));
+        AppUser newUser = new AppUser("New User", "new.user@example.com", passwordEncoder.encode("password123"));
         userRepository.save(newUser);
 
         // Attempt login with the new user's credentials
@@ -223,7 +223,7 @@ public class LoginControllerTest {
     @Test
     public void testLoginUser_MaxEmailLength() throws Exception {
         String maxEmail = "a".repeat(243) + "@example.com"; // Total length = 255
-        userRepository.save(new User("Max Email", maxEmail, passwordEncoder.encode("password123")));
+        userRepository.save(new AppUser("Max Email", maxEmail, passwordEncoder.encode("password123")));
 
         LoginRequest request = new LoginRequest(maxEmail, "password123");
 
@@ -240,7 +240,7 @@ public class LoginControllerTest {
     @Test
     public void testLoginUser_MaxPasswordLength() throws Exception {
         String maxPassword = "p".repeat(255);
-        userRepository.save(new User("Max Password", "max.password@example.com", passwordEncoder.encode(maxPassword)));
+        userRepository.save(new AppUser("Max Password", "max.password@example.com", passwordEncoder.encode(maxPassword)));
 
         LoginRequest request = new LoginRequest("max.password@example.com", maxPassword);
 
@@ -256,7 +256,7 @@ public class LoginControllerTest {
      */
     @Test
     public void testLoginUser_MinPasswordLength() throws Exception {
-        userRepository.save(new User("Min Password", "min.password@example.com", passwordEncoder.encode("pass1234")));
+        userRepository.save(new AppUser("Min Password", "min.password@example.com", passwordEncoder.encode("pass1234")));
 
         LoginRequest request = new LoginRequest("min.password@example.com", "pass1234");
 
@@ -272,7 +272,7 @@ public class LoginControllerTest {
      */
     @Test
     public void testLoginUser_MinEmailLength() throws Exception {
-        userRepository.save(new User("Min Email", "a@b.co", passwordEncoder.encode("password123")));
+        userRepository.save(new AppUser("Min Email", "a@b.co", passwordEncoder.encode("password123")));
 
         LoginRequest request = new LoginRequest("a@b.co", "password123");
 
@@ -302,7 +302,7 @@ public class LoginControllerTest {
      */
     @Test
     public void testLoginUser_EmailWithSubdomains() throws Exception {
-        userRepository.save(new User("Subdomain User", "user@sub.domain.example.com", passwordEncoder.encode("password123")));
+        userRepository.save(new AppUser("Subdomain User", "user@sub.domain.example.com", passwordEncoder.encode("password123")));
 
         LoginRequest request = new LoginRequest("user@sub.domain.example.com", "password123");
 
@@ -318,7 +318,7 @@ public class LoginControllerTest {
      */
     @Test
     public void testLoginUser_EmailWithSpecialCharacters() throws Exception {
-        userRepository.save(new User("Special User", "john+filter@example.com", passwordEncoder.encode("password123")));
+        userRepository.save(new AppUser("Special User", "john+filter@example.com", passwordEncoder.encode("password123")));
 
         LoginRequest request = new LoginRequest("john+filter@example.com", "password123");
 
@@ -363,7 +363,7 @@ public class LoginControllerTest {
     @Test
     public void testLoginUser_EmailWithUnicodeCharacters() throws Exception {
         String unicodeEmail = "user\u0040example.com"; // Unicode '@' character
-        userRepository.save(new User("Unicode User", unicodeEmail, passwordEncoder.encode("password123")));
+        userRepository.save(new AppUser("Unicode User", unicodeEmail, passwordEncoder.encode("password123")));
 
         LoginRequest request = new LoginRequest(unicodeEmail, "password123");
 
@@ -379,7 +379,7 @@ public class LoginControllerTest {
      */
     @Test
     public void testLoginUser_NonAsciiPassword() throws Exception {
-        userRepository.save(new User("Non-ASCII User", "non.ascii@example.com", passwordEncoder.encode("pässwörd123")));
+        userRepository.save(new AppUser("Non-ASCII User", "non.ascii@example.com", passwordEncoder.encode("pässwörd123")));
 
         LoginRequest request = new LoginRequest("non.ascii@example.com", "pässwörd123");
 
@@ -395,7 +395,7 @@ public class LoginControllerTest {
      */
     @Test
     public void testLoginUser_PasswordWithEscapeSequences() throws Exception {
-        userRepository.save(new User("Escape User", "escape.user@example.com", passwordEncoder.encode("pass\\123")));
+        userRepository.save(new AppUser("Escape User", "escape.user@example.com", passwordEncoder.encode("pass\\123")));
 
         LoginRequest request = new LoginRequest("escape.user@example.com", "pass\\123");
 

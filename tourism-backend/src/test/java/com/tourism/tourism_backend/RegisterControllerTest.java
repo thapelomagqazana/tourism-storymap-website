@@ -2,7 +2,7 @@ package com.tourism.tourism_backend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourism.tourism_backend.dto.UserDTO;
-import com.tourism.tourism_backend.models.User;
+import com.tourism.tourism_backend.models.AppUser;
 import com.tourism.tourism_backend.repositories.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RegisterControllerTest {
+public class RegisterControllerTest{
 
     @Autowired
     private MockMvc mockMvc;
@@ -113,7 +113,7 @@ public class RegisterControllerTest {
      */
     @Test
     public void testRegisterUser_EmailAlreadyExists() throws Exception {
-        User existingUser = new User();
+        AppUser existingUser = new AppUser();
         existingUser.setName("Jane Doe");
         existingUser.setEmail("jane.doe@example.com");
         existingUser.setPassword("password123");
@@ -207,7 +207,7 @@ public class RegisterControllerTest {
      */
     @Test
     public void testRegisterUser_ExistingEmail() throws Exception {
-        User existingUser = new User();
+        AppUser existingUser = new AppUser();
         existingUser.setName("Existing User");
         existingUser.setEmail("existing.user@example.com");
         existingUser.setPassword("password123");
