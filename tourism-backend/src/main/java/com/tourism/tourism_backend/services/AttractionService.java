@@ -1,5 +1,7 @@
 package com.tourism.tourism_backend.services;
 
+import com.tourism.tourism_backend.dto.AttractionDetailDTO;
+import com.tourism.tourism_backend.exceptions.ResourceNotFoundException;
 import com.tourism.tourism_backend.models.Attraction;
 import com.tourism.tourism_backend.repositories.AttractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +25,25 @@ public class AttractionService {
      */
     public List<Attraction> getAllAttractions() {
         return attractionRepository.findAll();
+    }
+
+    /**
+     * Retrieves detailed information for a specific attraction by its ID.
+     *
+     * @param id the ID of the attraction to retrieve
+     * @return an AttractionDetailDTO containing detailed information
+     * @throws ResourceNotFoundException if the attraction is not found
+     */
+    public AttractionDetailDTO getAttractionById(Long id) {
+        // Find attraction by ID or throw exception if not found
+        Attraction attraction = attractionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Attraction not found with id: " + id));
+
+        // Return a DTO with detailed attraction information
+        return new AttractionDetailDTO(
+                attraction.getName(),
+                attraction.getShortDescription(),
+                attraction.getPhotos()
+        );
     }
 }

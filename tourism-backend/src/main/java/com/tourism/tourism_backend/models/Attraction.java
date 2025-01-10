@@ -1,6 +1,7 @@
 package com.tourism.tourism_backend.models;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 /**
  * Entity representing an attraction in the system.
@@ -19,6 +20,9 @@ public class Attraction {
     @Column(nullable = false, length = 500)
     private String shortDescription;
 
+    @ElementCollection
+    private List<String> photos; // List of photo URLs
+
     // Default constructor
     public Attraction() {}
 
@@ -26,6 +30,12 @@ public class Attraction {
     public Attraction(String name, String shortDescription) {
         this.name = name;
         this.shortDescription = shortDescription;
+    }
+
+    public Attraction(String name, String shortDescription, List<String> photosList) {
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.photos = photosList;
     }
 
     // Getters and Setters
@@ -51,5 +61,13 @@ public class Attraction {
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 }
