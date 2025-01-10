@@ -20,6 +20,16 @@ public class UserDTO {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
+    // Default constructor
+    public UserDTO() {
+    }
+
+    // Constructor with parameters
+    public UserDTO(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
     // Getters and Setters
     public String getName() {
         return name != null ? name.trim() : null;

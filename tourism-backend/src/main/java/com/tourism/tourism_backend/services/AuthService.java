@@ -87,12 +87,16 @@ public class AuthService {
     /**
      * Retrieves the profile of a user by their email.
      *
-     * @param email the email of the user
-     * @return the User entity
-     * @throws UserNotFoundException if no user is found with the given email
+     * @param email the email of the logged-in user.
+     * @return a UserDTO containing the user's profile data.
+     * @throws IllegalArgumentException if the user is not found.
      */
-    public AppUser getUserProfile(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+    public UserDTO getUserProfile(String email) {
+        // Find user by email
+        AppUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+
+        // Map the User entity to UserDTO (excluding sensitive fields)
+        return new UserDTO(user.getName(), user.getEmail());
     }
 }

@@ -75,4 +75,21 @@ public class JwtUtil {
                 .getBody();
     }
 
+    /**
+     * Generates a JWT token with an expired expiration time for testing purposes.
+     *
+     * @param email the subject (email) for the token
+     * @return the generated expired token
+     */
+    public String generateExpiredToken(String email) {
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis() - 1000 * 60 * 10)) // Issued 10 minutes ago
+                .setExpiration(new Date(System.currentTimeMillis() - 1000 * 60 * 5)) // Expired 5 minutes ago
+                .signWith(signingKey, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    
+
 }
