@@ -2,13 +2,25 @@ package com.tourism.tourism_backend.dto;
 
 import java.util.List;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * Data Transfer Object for returning detailed attraction information.
  */
 public class AttractionDetailDTO {
 
+    @NotEmpty(message = "Name is required")
     private String name;
+    
+    @NotEmpty(message = "Description is required")
     private String description;
+
+    @NotNull(message = "Entrance fee is required")
+    @Min(value = 0, message = "Entrance fee must be a positive number")
+    private Double entranceFee;
+
     private List<String> photos;
 
     /**
@@ -18,9 +30,11 @@ public class AttractionDetailDTO {
      * @param description the description of the attraction
      * @param photos      the list of photo URLs for the attraction
      */
-    public AttractionDetailDTO(String name, String description, List<String> photos) {
+    public AttractionDetailDTO(String name, String description, 
+    Double entranceFee, List<String> photos) {
         this.name = name;
         this.description = description;
+        this.entranceFee = entranceFee;
         this.photos = photos;
     }
 
@@ -39,6 +53,14 @@ public class AttractionDetailDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Double getEntranceFee() {
+        return entranceFee;
+    }
+
+    public void setEntranceFee(Double entranceFee) {
+        this.entranceFee = entranceFee;
     }
 
     public List<String> getPhotos() {

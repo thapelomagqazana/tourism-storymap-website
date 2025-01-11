@@ -24,6 +24,9 @@ public class AppUser {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String role;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -37,12 +40,18 @@ public class AppUser {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Constructor with parameters (name, email, password)
-    public AppUser(String name, String email, String password) {
+    // Constructor with parameters (name, email, password, role)
+    public AppUser(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
         this.createdAt = LocalDateTime.now();
+    }
+
+    // Constructor with parameters (name, email, password)
+    public AppUser(String name, String email, String password) {
+        this(name, email, password, "USER"); // Default role is "USER"
     }
 
     // Getters and Setters
@@ -78,13 +87,21 @@ public class AppUser {
         this.password = password;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
+    public String getRole() {
+        return role;
     }
-    
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     @Override
     public String toString() {
-        return "User{id=" + id + ", name='" + name + '\'' + ", email='" + email + '\'' + ", createdAt=" + createdAt + '}';
+        return "User{id=" + id + ", name='" + name + '\'' + ", email='" + email + '\'' + ", role='" + role + '\'' + ", createdAt=" + createdAt + '}';
     }
 
     @Override

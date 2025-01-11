@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * Data Transfer Object for user registration.
- * It contains the fields required for registering a new user.
+ * Data Transfer Object for user registration and profile data.
  */
 public class UserDTO {
 
@@ -20,20 +19,33 @@ public class UserDTO {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
+    @NotBlank(message = "Role is required")
+    private String role;
+
     // Default constructor
     public UserDTO() {
     }
 
-    // Constructor with parameters
+    // Constructor for returning profile data (excluding password)
     public UserDTO(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
+    // Constructor with parameters (name, email, password, role)
+    public UserDTO(String name, String email, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    // Constructor for user registration
     public UserDTO(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = "USER";
     }
 
     // Getters and Setters
@@ -59,5 +71,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role != null ? role.trim() : null;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

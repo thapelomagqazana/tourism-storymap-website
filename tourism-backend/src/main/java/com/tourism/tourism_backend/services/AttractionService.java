@@ -5,9 +5,13 @@ import com.tourism.tourism_backend.exceptions.ResourceNotFoundException;
 import com.tourism.tourism_backend.models.Attraction;
 import com.tourism.tourism_backend.repositories.AttractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service class for handling attraction-related operations.
@@ -43,7 +47,25 @@ public class AttractionService {
         return new AttractionDetailDTO(
                 attraction.getName(),
                 attraction.getShortDescription(),
+                attraction.getEntranceFee(),
                 attraction.getPhotos()
         );
+    }
+
+    /**
+     * Adds a new attraction to the database.
+     *
+     * @param attractionDTO the DTO containing attraction details
+     */
+    @Transactional
+    public void addAttraction(AttractionDetailDTO attractionDTO) {
+
+        Attraction attraction = new Attraction();
+        attraction.setName(attractionDTO.getName().trim());
+        attraction.setShortDescription(attractionDTO.getDescription().trim());
+        attraction.setEntranceFee(attractionDTO.getEntranceFee());
+        attraction.setPhotos(attractionDTO.getPhotos());
+
+        attractionRepository.save(attraction);
     }
 }

@@ -64,9 +64,9 @@ public class GetProfileControllerTest {
         userRepository.save(userComplex);
 
         // Generate valid JWT tokens for the test users
-        validJwtToken1 = jwtUtil.generateToken(user1.getEmail());
-        validJwtToken2 = jwtUtil.generateToken(user2.getEmail());
-        validJwtTokenComplexName = jwtUtil.generateToken(userComplex.getEmail());
+        validJwtToken1 = jwtUtil.generateToken(user1.getEmail(), user1.getRole());
+        validJwtToken2 = jwtUtil.generateToken(user2.getEmail(), user2.getRole());
+        validJwtTokenComplexName = jwtUtil.generateToken(userComplex.getEmail(), userComplex.getRole());
 
         // Generate expired JWT token (using a utility method that generates expired tokens)
         expiredJwtToken = jwtUtil.generateExpiredToken(user1.getEmail());
@@ -211,7 +211,7 @@ public class GetProfileControllerTest {
         // Create a user with Unicode characters in the name
         AppUser user = new AppUser("Йон До", "unicode.user@example.com", "password123");
         userRepository.save(user);
-        jwtToken = jwtUtil.generateToken(user.getEmail());
+        jwtToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         // Perform GET request and verify response
         mockMvc.perform(get("/api/users/profile")
@@ -230,7 +230,7 @@ public class GetProfileControllerTest {
         // Create a user with special characters in the email
         AppUser user = new AppUser("Special Email", "john+filter@example.com", "password123");
         userRepository.save(user);
-        jwtToken = jwtUtil.generateToken(user.getEmail());
+        jwtToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         // Perform GET request and verify response
         mockMvc.perform(get("/api/users/profile")
@@ -249,7 +249,7 @@ public class GetProfileControllerTest {
         // Create a user with leading/trailing spaces in the name
         AppUser user = new AppUser("  John Doe  ", "john.spaces@example.com", "password123");
         userRepository.save(user);
-        jwtToken = jwtUtil.generateToken(user.getEmail());
+        jwtToken = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         // Perform GET request and verify response
         mockMvc.perform(get("/api/users/profile")
@@ -268,7 +268,7 @@ public class GetProfileControllerTest {
         // Create a user with mixed-case email
         AppUser user = new AppUser("Mixed Case", "John.Doe@Example1.Com", "password123");
         userRepository.save(user);
-        jwtToken = jwtUtil.generateToken(user.getEmail().toLowerCase());
+        jwtToken = jwtUtil.generateToken(user.getEmail().toLowerCase(), user.getRole());
 
         // Perform GET request and verify response
         mockMvc.perform(get("/api/users/profile")

@@ -50,13 +50,11 @@ public class GetAttractionByIdControllerTest {
         attractionRepository.deleteAll();
 
         // Add sample attractions
-        Attraction attraction1 = attractionRepository.save(new Attraction("Attraction 1", "Description 1", List.of("url1")));
-        Attraction attraction2 = attractionRepository.save(new Attraction("Attraction 2", "Description 2", List.of("url1", "url2")));
-        Attraction attraction3 = attractionRepository.save(new Attraction("Attraction 3", "Description 3", List.of()));
-        Attraction attraction4 = attractionRepository.save(new Attraction("Attraction 4", "D".repeat(500), List.of("url1")));
-        attractionRepository.save(new Attraction("Sample Attraction", "Sample Description", List.of("url1", "url2")));
-
-        System.out.println(attraction4.getShortDescription().length());
+        Attraction attraction1 = attractionRepository.save(new Attraction("Attraction 1", "Description 1",  100.0, List.of("url1")));
+        Attraction attraction2 = attractionRepository.save(new Attraction("Attraction 2", "Description 2", 120.0, List.of("url1", "url2")));
+        Attraction attraction3 = attractionRepository.save(new Attraction("Attraction 3", "Description 3", 150.0, List.of()));
+        Attraction attraction4 = attractionRepository.save(new Attraction("Attraction 4", "D".repeat(500), 200.0,  List.of("url1")));
+        attractionRepository.save(new Attraction("Sample Attraction", "Sample Description", 200.0,  List.of("url1", "url2")));
 
         // Obtain their IDs for use in the tests
         attractionId1 = attraction1.getId();

@@ -43,7 +43,7 @@ public class UpdateProfileControllerTest {
         // Create a sample user with a hashed password
         String rawPassword = "password123";
         String hashedPassword = new BCryptPasswordEncoder().encode(rawPassword);
-        AppUser user = new AppUser("John Doe", uniqueEmail, hashedPassword);
+        AppUser user = new AppUser("John Doe", uniqueEmail, hashedPassword, "USER");
         userRepository.save(user);
 
         // Generate a valid JWT token using the unique email and raw password
@@ -193,7 +193,7 @@ public class UpdateProfileControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("At least one field is required"));
+                .andExpect(jsonPath("$.error").value("At least one field is required for update"));
     }
 
     /**
@@ -208,7 +208,7 @@ public class UpdateProfileControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("At least one field is required"));
+                .andExpect(jsonPath("$.error").value("At least one field is required for update"));
     }
 
     /**

@@ -14,14 +14,17 @@ public class Attraction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false, length = 500)
-    private String shortDescription;
+    @Column(nullable = false, length = 1000)
+    private String shortDescription = "Default Description";
+
+    @Column(nullable = false)
+    private Double entranceFee;
 
     @ElementCollection
-    private List<String> photos; // List of photo URLs
+    private List<String> photos;
 
     // Default constructor
     public Attraction() {}
@@ -36,6 +39,14 @@ public class Attraction {
         this.name = name;
         this.shortDescription = shortDescription;
         this.photos = photosList;
+    }
+
+    public Attraction(String name, String shortDescription, Double entranceFee, List<String> photos) {
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.shortDescription = shortDescription;  // Using short description as default if necessary
+        this.entranceFee = entranceFee;
+        this.photos = photos;
     }
 
     // Getters and Setters
@@ -61,6 +72,14 @@ public class Attraction {
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
+    }
+
+    public Double getEntranceFee() {
+        return entranceFee;
+    }
+
+    public void setEntranceFee(Double entranceFee) {
+        this.entranceFee = entranceFee;
     }
 
     public List<String> getPhotos() {

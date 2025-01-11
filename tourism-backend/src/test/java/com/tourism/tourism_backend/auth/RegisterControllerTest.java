@@ -44,6 +44,7 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,6 +65,8 @@ public class RegisterControllerTest{
         userDTO.setName("Jane Doe");
         userDTO.setEmail("jane.doe@example.com");
         userDTO.setPassword("12345678");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,6 +85,8 @@ public class RegisterControllerTest{
         userDTO.setName("Upper Case");
         userDTO.setEmail("JOHN.DOE@EXAMPLE.COM");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,6 +105,8 @@ public class RegisterControllerTest{
         userDTO.setName("Secure User");
         userDTO.setEmail("secure.user@example.com");
         userDTO.setPassword("P@ssw0rd#123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,12 +124,15 @@ public class RegisterControllerTest{
         existingUser.setName("Jane Doe");
         existingUser.setEmail("jane.doe@example.com");
         existingUser.setPassword("password123");
+        existingUser.setRole("USER");
         userRepository.save(existingUser);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setName("John Doe");
         userDTO.setEmail("jane.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -140,6 +150,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword(""); // Empty password
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -157,6 +169,8 @@ public class RegisterControllerTest{
         UserDTO userDTO = new UserDTO();
         userDTO.setName("John Doe");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -175,6 +189,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -193,6 +209,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -211,12 +229,15 @@ public class RegisterControllerTest{
         existingUser.setName("Existing User");
         existingUser.setEmail("existing.user@example.com");
         existingUser.setPassword("password123");
+        existingUser.setRole("USER");
         userRepository.save(existingUser);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setName("John Doe");
         userDTO.setEmail("existing.user@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -250,6 +271,8 @@ public class RegisterControllerTest{
         userDTO.setName("");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -268,6 +291,8 @@ public class RegisterControllerTest{
         userDTO.setName("A".repeat(255)); // 255 characters
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -304,6 +329,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("A".repeat(255)); // 255 characters
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -322,6 +349,8 @@ public class RegisterControllerTest{
         userDTO.setName("J"); // 1 character
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -340,6 +369,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("a@b.co"); // Minimum valid email
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -358,6 +389,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("pass1234"); // 8 characters
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -376,6 +409,8 @@ public class RegisterControllerTest{
         userDTO.setName("Subdomain User");
         userDTO.setEmail("user@sub.domain.example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -394,6 +429,8 @@ public class RegisterControllerTest{
         userDTO.setName("John!@# Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -412,6 +449,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john+filter@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -430,6 +469,8 @@ public class RegisterControllerTest{
         userDTO.setName(" John Doe ");
         userDTO.setEmail(" john.doe@example.com ");
         userDTO.setPassword(" password123 ");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -450,6 +491,8 @@ public class RegisterControllerTest{
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -468,6 +511,8 @@ public class RegisterControllerTest{
         userDTO.setName("Йон До");
         userDTO.setEmail("john.doe@example.com");
         userDTO.setPassword("password123");
+        userDTO.setRole("USER");
+
 
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)

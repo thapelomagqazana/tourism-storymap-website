@@ -40,8 +40,8 @@ public class GetAttractionsControllerTest {
     @Test
     public void testRetrieveAttractions_ListNotEmpty() throws Exception {
         // Add sample attractions to the repository
-        attractionRepository.save(new Attraction("Attraction 1", "Description 1"));
-        attractionRepository.save(new Attraction("Attraction 2", "Description 2"));
+        attractionRepository.save(new Attraction("Attraction 1", "Description 1", 100.0, List.of("url1")));
+        attractionRepository.save(new Attraction("Attraction 2", "Description 2", 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -68,7 +68,7 @@ public class GetAttractionsControllerTest {
     @Test
     public void testRetrieveAttractions_OneEntry() throws Exception {
         // Add one sample attraction to the repository
-        attractionRepository.save(new Attraction("Single Attraction", "Single Description"));
+        attractionRepository.save(new Attraction("Single Attraction", "Single Description", 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -86,7 +86,7 @@ public class GetAttractionsControllerTest {
         // Add 100 sample attractions to the repository
         List<Attraction> attractions = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
-            attractions.add(new Attraction("Attraction " + i, "Description " + i));
+            attractions.add(new Attraction("Attraction " + i, "Description " + i, 100.0, List.of("url1")));
         }
         attractionRepository.saveAll(attractions);
 
@@ -105,8 +105,8 @@ public class GetAttractionsControllerTest {
     public void testRetrieveAttractions_InvalidMethod() throws Exception {
         mockMvc.perform(post("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isMethodNotAllowed())
-                .andExpect(jsonPath("$.error").value("Method not allowed"));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Malformed JSON request"));
     }
 
     // /**
@@ -138,7 +138,7 @@ public class GetAttractionsControllerTest {
     public void testRetrieveAttractions_MaxEntries() throws Exception {
         List<Attraction> attractions = new ArrayList<>();
         for (int i = 1; i <= 10000; i++) {
-            attractions.add(new Attraction("Attraction " + i, "Description " + i));
+            attractions.add(new Attraction("Attraction " + i, "Description " + i, 100.0, List.of("url1")));
         }
         attractionRepository.saveAll(attractions);
 
@@ -154,7 +154,7 @@ public class GetAttractionsControllerTest {
     @Test
     public void testRetrieveAttractions_MaxNameLength() throws Exception {
         String maxName = "A".repeat(255);
-        attractionRepository.save(new Attraction(maxName, "Description with normal length"));
+        attractionRepository.save(new Attraction(maxName, "Description with normal length", 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -169,7 +169,7 @@ public class GetAttractionsControllerTest {
     @Test
     public void testRetrieveAttractions_MaxShortDescriptionLength() throws Exception {
         String maxDescription = "D".repeat(500);
-        attractionRepository.save(new Attraction("Normal Name", maxDescription));
+        attractionRepository.save(new Attraction("Normal Name", maxDescription, 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -185,7 +185,7 @@ public class GetAttractionsControllerTest {
     public void testRetrieveAttractions_AllSameEntries() throws Exception {
         List<Attraction> attractions = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            attractions.add(new Attraction("Same Name", "Same Description"));
+            attractions.add(new Attraction("Same Name", "Same Description", 100.0, List.of("url1")));
         }
         attractionRepository.saveAll(attractions);
 
@@ -202,7 +202,7 @@ public class GetAttractionsControllerTest {
      */
     @Test
     public void testRetrieveAttractions_UnicodeName() throws Exception {
-        attractionRepository.save(new Attraction("Аттракцион", "Описание"));
+        attractionRepository.save(new Attraction("Аттракцион", "Описание", 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -217,7 +217,7 @@ public class GetAttractionsControllerTest {
      */
     @Test
     public void testRetrieveAttractions_SpecialCharactersInName() throws Exception {
-        attractionRepository.save(new Attraction("Attraction@#%!", "Short description with special characters"));
+        attractionRepository.save(new Attraction("Attraction@#%!", "Short description with special characters", 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -231,7 +231,7 @@ public class GetAttractionsControllerTest {
      */
     @Test
     public void testRetrieveAttractions_LeadingTrailingSpaces() throws Exception {
-        attractionRepository.save(new Attraction("  Leading Space  ", "Short description"));
+        attractionRepository.save(new Attraction("  Leading Space  ", "Short description", 100.0, List.of("url1")));
 
         mockMvc.perform(get("/api/attractions")
                 .contentType(MediaType.APPLICATION_JSON))

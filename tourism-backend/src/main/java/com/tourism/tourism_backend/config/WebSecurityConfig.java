@@ -6,22 +6,32 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Value;
+
 import com.tourism.tourism_backend.filters.JwtFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.Collection;
 
 /**
  * WebSecurityConfig class defines the security configuration for the application.
- * This configuration ensures proper access control and disables CSRF protection for simplicity during testing.
  */
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurityConfig {
 
     @Value("${jwt.secret}")
@@ -36,23 +46,21 @@ public class WebSecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtAuthenticationFilter) throws Exception {
-        // Disable Cross-Site Request Forgery (CSRF) protection for simplicity in development and testing environments.
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Permit all requests to the user registration endpoint without authentication.
                 .requestMatchers("/api/users/register", "/api/users/login", "/api/attractions").permitAll()
-                .requestMatchers( "/api/users/logout", "/api/users/profile").authenticated()
-                // Require authentication for all other requests.
+                .requestMatchers("/api/users/logout", "/api/users/profile").authenticated()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception
-            .authenticationEntryPoint((request, response, authException) -> 
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required"))
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required"))
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())); // Ensure JWT is used for authentication;
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> 
+                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
+            ));
 
-        // Build and return the configured SecurityFilterChain.
         return http.build();
     }
 
@@ -63,10 +71,24 @@ public class WebSecurityConfig {
      */
     @Bean
     public JwtDecoder jwtDecoder() {
-        // Convert the secret key string to a SecretKey instance
         byte[] secretBytes = jwtSecret.getBytes();
         SecretKey secretKey = new SecretKeySpec(secretBytes, "HmacSHA256");
         return NimbusJwtDecoder.withSecretKey(secretKey).build();
     }
 
+    /**
+     * Custom JwtAuthenticationConverter to correctly map roles without prefixing "ROLE_".
+     *
+     * @return a Converter that converts Jwt tokens to authentication tokens.
+     */
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+    
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
+    }
 }

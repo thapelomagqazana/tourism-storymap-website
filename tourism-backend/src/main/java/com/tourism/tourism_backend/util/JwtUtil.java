@@ -35,11 +35,13 @@ public class JwtUtil {
      * Generates a JWT token with the default expiration time.
      *
      * @param email the subject (email) for the token
+     * @param role the subject (role) for the token
      * @return the generated token
      */
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("roles", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(signingKey, SignatureAlgorithm.HS256)

@@ -56,7 +56,7 @@ public class LogoutControllerTest{
         userRepository.save(user);
 
         // Generate a valid JWT token for the user
-        validToken = jwtUtil.generateToken("john.doe@example.com");
+        validToken = jwtUtil.generateToken("john.doe@example.com", "USER");
 
         // Generate a near-expiry token (token with short TTL for testing)
         nearExpiryToken = jwtUtil.generateTokenWithShortExpiry("john.doe@example.com");
@@ -91,7 +91,7 @@ public class LogoutControllerTest{
                 .andReturn().getResponse().getContentAsString();
 
         // Generate a valid token and log in
-        String token = jwtUtil.generateToken("john.doe@example.com");
+        String token = jwtUtil.generateToken("john.doe@example.com", "USER");
 
         // Perform logout request
         mockMvc.perform(post("/api/users/logout")
@@ -142,7 +142,7 @@ public class LogoutControllerTest{
     @Test
     public void testLogoutUser_BlacklistedToken() throws Exception {
         // Generate a valid token
-        String token = jwtUtil.generateToken("john.doe@example.com");
+        String token = jwtUtil.generateToken("john.doe@example.com", "USER");
 
         // Blacklist the token
         tokenBlacklistService.blacklistToken(token);
@@ -172,7 +172,7 @@ public class LogoutControllerTest{
     @Test
     public void testLogoutUser_WithoutBearerPrefix() throws Exception {
         // Generate a valid token
-        String token = jwtUtil.generateToken("john.doe@example.com");
+        String token = jwtUtil.generateToken("john.doe@example.com", "USER");
 
         // Attempt to logout without "Bearer" prefix
         mockMvc.perform(post("/api/users/logout")
