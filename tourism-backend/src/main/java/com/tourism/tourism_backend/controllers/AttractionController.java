@@ -89,4 +89,17 @@ public class AttractionController {
         Attraction updatedAttraction = attractionService.updateAttraction(id, attractionDTO);
         return ResponseEntity.ok(updatedAttraction);
     }
+
+    /**
+     * DELETE endpoint to remove an attraction by ID. Admin only.
+     *
+     * @param id the ID of the attraction to delete
+     * @return ResponseEntity with a success message or error
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAttraction(@PathVariable Long id) {
+        attractionService.deleteAttractionById(id);
+        return ResponseEntity.ok("{\"message\": \"Attraction deleted successfully\"}");
+    }
 }

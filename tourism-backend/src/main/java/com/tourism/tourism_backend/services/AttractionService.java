@@ -88,6 +88,10 @@ public class AttractionService {
         throw new IllegalArgumentException("At least one field is required for update");
     }
 
+    if (attractionDTO.getEntranceFee() != null && attractionDTO.getEntranceFee() < 0) {
+        throw new IllegalArgumentException("Entrance fee must be a positive number");
+    }
+
     // Update only if new values are provided
     if (attractionDTO.getName() != null && !attractionDTO.getName().isEmpty()) {
         attraction.setName(attractionDTO.getName());
@@ -104,4 +108,19 @@ public class AttractionService {
 
         return attractionRepository.save(attraction);
     }
+
+    /**
+     * Deletes an attraction by ID.
+     *
+     * @param id the ID of the attraction to delete
+     * @throws ResourceNotFoundException if the attraction with the given ID is not found
+     */
+    @Transactional
+    public void deleteAttractionById(Long id) {
+        if (!attractionRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Attraction not found with ID: " + id);
+        }
+        attractionRepository.deleteById(id);
+    }
+    
 }

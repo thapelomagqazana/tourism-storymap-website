@@ -315,7 +315,7 @@ public class UpdateAttractionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("At least one field is required for update"));
+                .andExpect(jsonPath("$.error").value("At least one field is required for update"));
     }
 
     /**
@@ -433,7 +433,7 @@ public class UpdateAttractionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("At least one field is required for update"));
+                .andExpect(jsonPath("$.error").value("At least one field is required for update"));
     }
 
     /**
@@ -512,7 +512,7 @@ public class UpdateAttractionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("At least one field is required for update"));
+                .andExpect(jsonPath("$.error").value("At least one field is required for update"));
     }
 
     /**
@@ -545,7 +545,7 @@ public class UpdateAttractionControllerTest {
             {
                 "name": " ",
                 "description": " ",
-                "entranceFee": 0,
+                "entranceFee": -1.0,
                 "photos": []
             }
         """;
@@ -554,6 +554,7 @@ public class UpdateAttractionControllerTest {
                 .header("Authorization", adminJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Entrance fee must be a positive number"));
     }
 }

@@ -26,27 +26,40 @@ public class Attraction {
     @ElementCollection
     private List<String> photos;
 
+    @Column(nullable = false)
+    private int trafficCount = 0; // Initialize traffic count to 0
+
     // Default constructor
     public Attraction() {}
 
-    // Constructor with parameters
+    // Constructor with essential fields
     public Attraction(String name, String shortDescription) {
         this.name = name;
         this.shortDescription = shortDescription;
     }
 
-    public Attraction(String name, String shortDescription, List<String> photosList) {
+    // Constructor with photos list
+    public Attraction(String name, String shortDescription, List<String> photos) {
         this.name = name;
         this.shortDescription = shortDescription;
-        this.photos = photosList;
+        this.photos = photos;
     }
 
+    // Constructor with entrance fee and photos list
     public Attraction(String name, String shortDescription, Double entranceFee, List<String> photos) {
         this.name = name;
         this.shortDescription = shortDescription;
-        this.shortDescription = shortDescription;  // Using short description as default if necessary
         this.entranceFee = entranceFee;
         this.photos = photos;
+    }
+
+    // Constructor with all fields including traffic count
+    public Attraction(String name, String shortDescription, Double entranceFee, List<String> photos, int trafficCount) {
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.entranceFee = entranceFee;
+        this.photos = photos;
+        this.trafficCount = trafficCount;
     }
 
     // Getters and Setters
@@ -88,5 +101,13 @@ public class Attraction {
 
     public void setPhotos(List<String> photos) {
         this.photos = photos;
+    }
+
+    public int getTrafficCount() {
+        return trafficCount;
+    }
+
+    public void setTrafficCount(int trafficCount) {
+        this.trafficCount = trafficCount;
     }
 }
