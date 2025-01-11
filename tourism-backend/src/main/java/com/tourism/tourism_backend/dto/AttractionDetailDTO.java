@@ -2,6 +2,8 @@ package com.tourism.tourism_backend.dto;
 
 import java.util.List;
 
+import com.tourism.tourism_backend.validation.OnCreate;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,14 +13,14 @@ import jakarta.validation.constraints.NotNull;
  */
 public class AttractionDetailDTO {
 
-    @NotEmpty(message = "Name is required")
+    @NotEmpty(message = "Name is required", groups = OnCreate.class)
     private String name;
     
-    @NotEmpty(message = "Description is required")
+    @NotEmpty(message = "Description is required", groups = OnCreate.class)
     private String description;
 
-    @NotNull(message = "Entrance fee is required")
-    @Min(value = 0, message = "Entrance fee must be a positive number")
+    @NotNull(message = "Entrance fee is required", groups = OnCreate.class)
+    @Min(value = 0, message = "Entrance fee must be a positive number", groups = OnCreate.class)
     private Double entranceFee;
 
     private List<String> photos;

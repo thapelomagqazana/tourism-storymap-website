@@ -3,6 +3,8 @@ package com.tourism.tourism_backend.controllers;
 import com.tourism.tourism_backend.dto.AttractionDetailDTO;
 import com.tourism.tourism_backend.models.Attraction;
 import com.tourism.tourism_backend.services.AttractionService;
+import com.tourism.tourism_backend.validation.OnCreate;
+import com.tourism.tourism_backend.validation.OnUpdate;
 
 import jakarta.validation.Valid;
 
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +59,7 @@ public class AttractionController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<?> addAttraction(@Valid @RequestBody AttractionDetailDTO attractionDTO) {
+    public ResponseEntity<?> addAttraction(@RequestBody @Validated(OnCreate.class) AttractionDetailDTO attractionDTO) {
         
         String name = attractionDTO.getName();
         
@@ -70,5 +73,20 @@ public class AttractionController {
         
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "Attraction added successfully"));
+    }
+
+    /**
+     * PUT endpoint to update an existing attraction (Admin only).
+     *
+     * @param id            the ID of the attraction to update
+     * @param attractionDTO the updated attraction details
+     * @return ResponseEntity with updated attraction or error message
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAttraction(@PathVariable Long id,
+                                              @RequestBody @Validated(OnUpdate.class) AttractionDetailDTO attractionDTO) {
+        Attraction updatedAttraction = attractionService.updateAttraction(id, attractionDTO);
+        return ResponseEntity.ok(updatedAttraction);
     }
 }

@@ -68,4 +68,40 @@ public class AttractionService {
 
         attractionRepository.save(attraction);
     }
+
+    /**
+     * Updates an existing attraction by ID.
+     *
+     * @param id the ID of the attraction to update
+     * @param attractionDTO the updated attraction details
+     * @return the updated Attraction entity
+     * @throws ResourceNotFoundException if the attraction is not found
+     */
+    public Attraction updateAttraction(Long id, AttractionDetailDTO attractionDTO) {
+        Attraction attraction = attractionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Attraction not found with ID: " + id));
+
+    // Check if all fields are missing
+    if ((attractionDTO.getName() == null || attractionDTO.getName().trim().isEmpty()) && 
+        (attractionDTO.getDescription() == null || attractionDTO.getDescription().trim().isEmpty()) &&
+        (attractionDTO.getEntranceFee() == null) && (attractionDTO.getPhotos() == null || attractionDTO.getPhotos().isEmpty())) {
+        throw new IllegalArgumentException("At least one field is required for update");
+    }
+
+    // Update only if new values are provided
+    if (attractionDTO.getName() != null && !attractionDTO.getName().isEmpty()) {
+        attraction.setName(attractionDTO.getName());
+    }
+    if (attractionDTO.getDescription() != null && !attractionDTO.getDescription().isEmpty()) {
+        attraction.setShortDescription(attractionDTO.getDescription());
+    }
+    if (attractionDTO.getEntranceFee() != null) {
+        attraction.setEntranceFee(attractionDTO.getEntranceFee());
+    }
+    if (attractionDTO.getPhotos() != null) {
+        attraction.setPhotos(attractionDTO.getPhotos());
+    }
+
+        return attractionRepository.save(attraction);
+    }
 }

@@ -18,7 +18,7 @@ public class Attraction {
     private String name;
 
     @Column(nullable = false, length = 1000)
-    private String shortDescription = "Default Description";
+    private String shortDescription;
 
     @Column(nullable = false)
     private Double entranceFee;
