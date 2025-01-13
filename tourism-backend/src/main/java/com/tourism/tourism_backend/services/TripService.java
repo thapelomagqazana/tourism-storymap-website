@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service layer for handling business logic related to trips.
@@ -23,5 +24,15 @@ public class TripService {
      */
     public List<Trip> getAllTrips() {
         return tripRepository.findAll();
+    }
+
+    /**
+     * Retrieves detailed trip information by ID.
+     *
+     * @param id the ID of the trip
+     * @return an Optional containing the trip if found, or empty if not found
+     */
+    public Optional<Trip> findTripById(Long id) {
+        return tripRepository.findById(id);
     }
 }

@@ -5,10 +5,12 @@ import com.tourism.tourism_backend.services.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Controller for handling HTTP requests related to trips.
@@ -32,5 +34,16 @@ public class TripController {
 
         // Return the list of trips in the response with HTTP 200 status
         return ResponseEntity.ok(trips);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTripDetails(@PathVariable Long id) {
+        Optional<Trip> tripOptional = tripService.findTripById(id);
+
+        if (tripOptional.isEmpty()) {
+            return ResponseEntity.status(404).body("{\"error\": \"Trip not found with ID: " + id + "\"}");
+        }
+
+        return ResponseEntity.ok(tripOptional.get());
     }
 }
