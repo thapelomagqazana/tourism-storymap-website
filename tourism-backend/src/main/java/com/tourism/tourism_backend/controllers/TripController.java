@@ -1,11 +1,15 @@
 package com.tourism.tourism_backend.controllers;
 
+import com.tourism.tourism_backend.dto.TripRequestDTO;
 import com.tourism.tourism_backend.models.Trip;
 import com.tourism.tourism_backend.services.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,5 +49,18 @@ public class TripController {
         }
 
         return ResponseEntity.ok(tripOptional.get());
+    }
+
+    /**
+     * POST endpoint to add a new trip plan (Admin only).
+     *
+     * @param tripRequest the request body containing trip details
+     * @return ResponseEntity with success message or error
+     */
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> addTripPlan(@RequestBody TripRequestDTO tripRequest) {
+        Trip createdTrip = tripService.createTrip(tripRequest);
+        return ResponseEntity.status(201).body("{\"message\": \"Trip created successfully\", \"tripId\": " + createdTrip.getId() + "}");
     }
 }
