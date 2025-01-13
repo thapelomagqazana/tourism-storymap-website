@@ -45,6 +45,14 @@ public class Attraction {
         this.photos = photos;
     }
 
+    public Attraction(Long id, String name, String shortDescription, Double entranceFee, List<String> photos) {
+        this.id = id;
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.entranceFee = entranceFee;
+        this.photos = photos;
+    }
+
     // Constructor with entrance fee and photos list
     public Attraction(String name, String shortDescription, Double entranceFee, List<String> photos) {
         this.name = name;
