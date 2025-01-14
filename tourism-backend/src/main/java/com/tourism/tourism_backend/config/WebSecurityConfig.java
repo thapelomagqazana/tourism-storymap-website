@@ -50,7 +50,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/users/register", "/api/users/login", "/api/attractions").permitAll()
                 .requestMatchers("/api/users/logout", "/api/users/profile",
-                                "/api/attractions/{id}/traffic", "/api/trips").authenticated()
+                                "/api/attractions/{id}/traffic", "/api/trips", "/api/reviews, /api/admin").authenticated()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception
