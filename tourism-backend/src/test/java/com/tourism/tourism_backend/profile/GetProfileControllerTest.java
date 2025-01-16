@@ -7,6 +7,10 @@ import com.tourism.tourism_backend.repositories.BlacklistedTokenRepository;
 import com.tourism.tourism_backend.repositories.UserRepository;
 import com.tourism.tourism_backend.services.AuthService;
 import com.tourism.tourism_backend.util.JwtUtil;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,21 @@ public class GetProfileControllerTest {
     private String expiredJwtToken;
 
     private String jwtToken;
+
+    @BeforeAll
+    static void setUp() {
+        // Load the .env.test file
+        String envFile = System.getProperty("TEST_ENV", ".env.test");
+        Dotenv dotenv = Dotenv.configure().filename(envFile).load();
+
+        // Set system properties for testing
+        System.setProperty("server.port", dotenv.get("SERVER_PORT"));
+        System.setProperty("spring.datasource.url", dotenv.get("DB_URL"));
+        System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
+        System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
+        System.setProperty("jwt.secret", dotenv.get("JWT_SECRET"));
+        System.setProperty("jwt.expiration.ms", dotenv.get("JWT_EXPIRATION_MS"));
+    }
 
     @BeforeEach
     public void setup() {

@@ -39,15 +39,17 @@ public class AuthService {
      */
     @Transactional
     public AppUser registerUser(UserDTO userDTO) {
+        // Normalize email and check for existing user
+        String normalizedEmail = userDTO.getEmail().trim().toLowerCase();
         // Check if the email is already in use
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
             throw new EmailAlreadyExistsException("Email is already in use");
         }
 
         // Create a new AppUser entity and set its fields
         AppUser user = new AppUser();
         user.setName(userDTO.getName().trim());
-        user.setEmail(userDTO.getEmail().trim());
+        user.setEmail(normalizedEmail);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword().trim()));
         user.setRole(userDTO.getRole().trim().toUpperCase()); // Normalize role to uppercase
 

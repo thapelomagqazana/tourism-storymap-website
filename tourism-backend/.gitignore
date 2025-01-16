@@ -85,6 +85,7 @@ desktop.ini
 
 # Configuration files
 .env
+.env.test
 
 # Generated files
 out/

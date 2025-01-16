@@ -4,9 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Date;
@@ -17,16 +16,22 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
     private String jwtSecret;
-
-    @Value("${jwt.expiration}")
     private long jwtExpirationMs;
-
     private Key signingKey;
 
+    /**
+     * Initializes the JWT utility by loading configuration from environment variables
+     * and preparing the signing key.
+     */
     @PostConstruct
     public void init() {
+        // Load environment variables using Dotenv
+        Dotenv dotenv = Dotenv.configure().load();
+
+        jwtSecret = dotenv.get("JWT_SECRET");
+        jwtExpirationMs = Long.parseLong(dotenv.get("JWT_EXPIRATION_MS"));
+
         // Create signing key using HMAC and the secret key
         signingKey = new SecretKeySpec(jwtSecret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
     }
@@ -35,7 +40,7 @@ public class JwtUtil {
      * Generates a JWT token with the default expiration time.
      *
      * @param email the subject (email) for the token
-     * @param role the subject (role) for the token
+     * @param role  the subject (role) for the token
      * @return the generated token
      */
     public String generateToken(String email, String role) {
@@ -91,7 +96,4 @@ public class JwtUtil {
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
-
-    
-
 }

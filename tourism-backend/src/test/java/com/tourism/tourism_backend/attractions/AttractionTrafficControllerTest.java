@@ -6,6 +6,9 @@ import com.tourism.tourism_backend.models.Attraction;
 import com.tourism.tourism_backend.repositories.AttractionRepository;
 import com.tourism.tourism_backend.repositories.UserRepository;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,21 @@ public class AttractionTrafficControllerTest {
     private Attraction attraction1;
     private Attraction attraction2;
     private Attraction attraction3;
+
+    @BeforeAll
+    static void setUp() {
+        // Load the .env.test file
+        String envFile = System.getProperty("TEST_ENV", ".env.test");
+        Dotenv dotenv = Dotenv.configure().filename(envFile).load();
+
+        // Set system properties for testing
+        System.setProperty("server.port", dotenv.get("SERVER_PORT"));
+        System.setProperty("spring.datasource.url", dotenv.get("DB_URL"));
+        System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
+        System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
+        System.setProperty("jwt.secret", dotenv.get("JWT_SECRET"));
+        System.setProperty("jwt.expiration.ms", dotenv.get("JWT_EXPIRATION_MS"));
+    }
 
     @BeforeEach
     public void setup() throws Exception {
