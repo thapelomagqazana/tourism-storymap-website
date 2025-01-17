@@ -91,3 +91,5 @@ desktop.ini
 out/
 bin/
 build/
+
+minikube-linux-amd64
