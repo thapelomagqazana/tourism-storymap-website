@@ -88,8 +88,48 @@ This project provides a RESTful backend API for managing attractions, trips, use
    mvn install
    ```
 
-3. **Configure the database**:
-   - Update the `application.properties` file with your database connection details.
+3. **Environment Configuration Files**:
+
+  This project uses `.env` files to manage environment-specific configurations. Below are the contents of the `.env` and `.env.test` files:
+
+  `.env`
+
+  This file contains the configuration for the development environment.
+
+  ```properties
+  # Database Configuration
+  DB_URL=jdbc:mysql://localhost:3306/tourismdb # Any mysql DB_URL
+  DB_USERNAME=your_username 'root'
+  DB_PASSWORD=your_password
+
+  # JWT Configuration
+  JWT_SECRET=your_secret_key
+  JWT_EXPIRATION_MS=3600000  # 1 hour in milliseconds
+
+  # Server Configuration
+  SERVER_PORT=8080
+  ```
+
+  `.env.test`
+
+  This file contains the configuration for the test environment.
+
+  ```properties
+  # Test Database Configuration
+  DB_URL=jdbc:mysql://localhost:3306/tourism_test # Any mysql DB_URL
+  DB_USERNAME=testuser
+  DB_PASSWORD=your_password
+
+  # JWT Configuration
+  JWT_SECRET=your_secret_key
+  JWT_EXPIRATION_MS=3600000  # 1 hour in milliseconds
+
+  # Test Server Configuration
+  SERVER_PORT=8081
+  ```
+
+---
+
 
 4. **Run the application**:
    ```bash

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tourism-backend-deployment
+spec:
+  replicas: 3  # Number of replicas for scalability
+  selector:
+    matchLabels:
+      app: tourism-backend
+  template:
+    metadata:
+      labels:
+        app: tourism-backend
+    spec:
+      containers:
+        - name: tourism-backend
+          image: thapelomagqazana/tourism-backend:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_URL
+              value: "jdbc:mysql://mysql-service:3306/tourismdb"
+            - name: DB_USERNAME
+              value: "root"
+            - name: DB_PASSWORD
+              value: "465Seven%"
+            - name: JWT_SECRET
+              value: "TeEz1aOD1QN2sxJsvoLZaJaRlqqb9OP0"
+            - name: JWT_EXPIRATION_MS
+              value: "3600000"
