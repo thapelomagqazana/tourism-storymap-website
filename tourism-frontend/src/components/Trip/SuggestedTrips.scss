@@ -1,0 +1,89 @@
+@use '../../assets/styles/_variables.scss' as vars;
+
+.suggested-trips {
+  padding: vars.$spacing-lg;
+  background-color: vars.$color-background;
+
+  .section-title {
+    font-family: vars.$font-headings;
+    font-size: vars.$font-size-xl;
+    color: vars.$color-primary;
+    text-align: center;
+    margin-bottom: vars.$spacing-lg;
+  }
+
+  .trips-container {
+    display: flex;
+    gap: vars.$spacing-lg;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .trip-card {
+    background-color: vars.$color-light;
+    border: 1px solid vars.$color-primary;
+    border-radius: vars.$spacing-sm;
+    box-shadow: vars.$shadow-light;
+    padding: vars.$spacing-md;
+    max-width: 300px;
+    text-align: center;
+
+    .trip-title {
+      font-family: vars.$font-headings;
+      font-size: vars.$font-size-lg;
+      color: vars.$color-secondary;
+      margin-bottom: vars.$spacing-sm;
+    }
+
+    .trip-description {
+      font-family: vars.$font-body;
+      font-size: vars.$font-size-sm;
+      color: vars.$color-dark;
+      margin-bottom: vars.$spacing-md;
+    }
+
+    .trip-attractions {
+      font-size: vars.$font-size-sm;
+      color: vars.$color-text-muted;
+      margin-bottom: vars.$spacing-md;
+
+      li {
+        margin-bottom: vars.$spacing-xs;
+      }
+    }
+
+    .trip-actions {
+      display: flex;
+      gap: vars.$spacing-sm;
+      justify-content: center;
+
+      .btn {
+        padding: vars.$spacing-xs vars.$spacing-md;
+        border: none;
+        border-radius: vars.$spacing-xs;
+        font-family: vars.$font-body;
+        font-size: vars.$font-size-sm;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &.view-details {
+          background-color: vars.$color-primary;
+          color: vars.$color-light;
+
+          &:hover {
+            background-color: vars.$color-secondary;
+          }
+        }
+
+        &.customize-trip {
+          background-color: vars.$color-secondary;
+          color: vars.$color-light;
+
+          &:hover {
+            background-color: vars.$color-primary;
+          }
+        }
+      }
+    }
+  }
+}

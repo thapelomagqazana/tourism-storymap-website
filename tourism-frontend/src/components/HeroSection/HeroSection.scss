@@ -1,0 +1,98 @@
+@use '../../assets/styles/_variables.scss' as vars;
+@use '../../assets/styles/_mixins.scss' as mixins;
+
+.hero-section {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  color: vars.$color-light;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: brightness(0.7);
+  }
+
+  .hero-overlay {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: vars.$spacing-lg;
+    max-width: 800px;
+
+    @media (max-width: vars.$breakpoint-tablet) {
+      padding: vars.$spacing-md;
+    }
+
+    .hero-title {
+      font-family: vars.$font-headings;
+      font-size: vars.$font-size-xxl;
+      font-weight: bold;
+      margin-bottom: vars.$spacing-md;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+      @media (max-width: vars.$breakpoint-mobile) {
+        font-size: vars.$font-size-xl;
+      }
+    }
+
+    .hero-subtitle {
+      font-family: vars.$font-body;
+      font-size: vars.$font-size-md;
+      margin-bottom: vars.$spacing-lg;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+
+      @media (max-width: vars.$breakpoint-mobile) {
+        font-size: vars.$font-size-sm;
+      }
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: vars.$spacing-lg;
+      justify-content: center;
+
+      @media (max-width: vars.$breakpoint-mobile) {
+        flex-direction: column;
+        gap: vars.$spacing-sm;
+      }
+
+      .btn {
+        padding: vars.$spacing-sm vars.$spacing-lg;
+        font-size: vars.$font-size-md;
+        font-family: vars.$font-body;
+        border-radius: vars.$spacing-xs;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &.btn-primary {
+          background-color: vars.$color-primary;
+          color: vars.$color-light;
+
+          &:hover {
+            background-color: vars.$color-secondary;
+            color: vars.$color-dark;
+          }
+        }
+
+        &.btn-secondary {
+          background-color: transparent;
+          color: vars.$color-light;
+          border: 1px solid vars.$color-light;
+
+          &:hover {
+            background-color: vars.$color-light;
+            color: vars.$color-dark;
+          }
+        }
+      }
+    }
+  }
+}

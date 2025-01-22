@@ -79,8 +79,8 @@ This project provides a RESTful backend API for managing attractions, trips, use
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/tourism-backend.git
-   cd tourism-backend
+   git clone https://github.com/thapelomagqazana/tourism-storymap-website.git
+   cd tourism-storymap-website/tourism-backend/
    ```
 
 2. **Install dependencies**:

@@ -1,0 +1,137 @@
+@use '../../assets/styles/_variables.scss' as vars;
+@use '../../assets/styles/_mixins.scss' as mixins;
+
+.navbar {
+  background: linear-gradient(90deg, vars.$color-primary, vars.$color-secondary);
+  color: vars.$color-light;
+  box-shadow: vars.$shadow-light;
+  position: sticky;
+  top: 0;
+  z-index: 150;
+
+  .container {
+    @include mixins.flex-between-center;
+    padding: vars.$spacing-md 0;
+
+    @media (max-width: vars.$breakpoint-tablet) {
+      padding: vars.$spacing-sm 0;
+    }
+  }
+
+  .navbar-logo {
+    font-family: vars.$font-headings;
+    font-size: vars.$font-size-xl;
+    font-weight: bold;
+    color: vars.$color-light;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+    a {
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: vars.$color-dark;
+      }
+    }
+  }
+
+  .hamburger-menu {
+    display: none; // Default hidden for larger screens
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1100;
+
+    &:hover .hamburger-icon::before,
+    &:hover .hamburger-icon::after {
+      background-color: vars.$color-secondary;
+    }
+
+    @media (max-width: vars.$breakpoint-tablet) {
+      display: block; // Visible on smaller screens
+    }
+
+    .hamburger-icon {
+      position: relative;
+      width: 30px;
+      height: 10px;
+      background-color: vars.$color-light;
+      transition: background-color 0.3s ease;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 2px;
+        background-color: vars.$color-light;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+      }
+
+      &::before {
+        top: -8px;
+      }
+
+      &::after {
+        top: 8px;
+      }
+    }
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: vars.$spacing-lg;
+
+    li {
+      list-style: none;
+
+      .navbar-link {
+        font-family: vars.$font-body;
+        font-size: vars.$font-size-md;
+        color: vars.$color-light;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: vars.$color-dark;
+        }
+      }
+    }
+
+    @media (max-width: vars.$breakpoint-tablet) {
+      display: none; // Hidden by default
+      flex-direction: column;
+      background-color: vars.$color-dark;
+      box-shadow: vars.$shadow-medium;
+      border-radius: vars.$spacing-sm;
+      padding: vars.$spacing-md;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 250px;
+
+      &.block {
+        display: flex; // Shown when menuOpen is true
+      }
+    }
+  }
+
+  .navbar-cta {
+    display: none;
+
+    @media (min-width: vars.$breakpoint-tablet) {
+      display: block; // Visible on larger screens
+    }
+
+    .cta-button {
+      @include mixins.button-primary;
+      padding: vars.$spacing-sm vars.$spacing-lg;
+
+      &:hover {
+        background-color: vars.$color-light;
+        color: vars.$color-primary;
+      }
+    }
+  }
+}

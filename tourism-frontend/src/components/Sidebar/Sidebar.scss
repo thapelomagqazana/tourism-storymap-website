@@ -1,0 +1,125 @@
+@use '../../assets/styles/_variables.scss' as vars;
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px; // Adjust width as needed
+  height: 100%;
+  background-color: vars.$color-light;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 200; // Ensure a high value to sit above the MapView
+  overflow-y: auto;
+  padding: vars.$spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-lg;
+
+  @media (max-width: vars.$breakpoint-tablet) {
+    width: 100%; // Fullscreen on smaller devices
+  }
+
+  // Close Button
+  .sidebar-close {
+    position: absolute;
+    top: vars.$spacing-sm;
+    right: vars.$spacing-sm;
+    font-size: vars.$font-size-lg;
+    background: none;
+    border: none;
+    color: vars.$color-dark;
+    cursor: pointer;
+
+    &:hover {
+      color: vars.$color-danger;
+    }
+  }
+
+  // Sidebar Content
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacing-md;
+
+    .sidebar-title {
+      font-family: vars.$font-headings;
+      font-size: vars.$font-size-xl;
+      color: vars.$color-primary;
+      margin-bottom: vars.$spacing-sm;
+    }
+
+    .sidebar-description {
+      font-family: vars.$font-body;
+      font-size: vars.$font-size-md;
+      color: vars.$color-dark;
+      line-height: 1.6;
+      margin-bottom: vars.$spacing-md;
+    }
+
+    .sidebar-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: vars.$spacing-sm;
+
+      .sidebar-image {
+        width: 100%;
+        height: 80px; // Ensure consistent height
+        object-fit: cover;
+        border-radius: vars.$spacing-xs;
+        box-shadow: vars.$shadow-light;
+      }
+    }
+
+    .sidebar-info {
+      display: flex;
+      flex-direction: column;
+      gap: vars.$spacing-sm;
+
+      p {
+        font-family: vars.$font-body;
+        font-size: vars.$font-size-sm;
+        color: vars.$color-dark;
+
+        strong {
+          font-weight: bold;
+          color: vars.$color-secondary;
+        }
+      }
+    }
+
+    .sidebar-buttons {
+      display: flex;
+      gap: vars.$spacing-md;
+
+      .btn {
+        flex: 1;
+        padding: vars.$spacing-sm vars.$spacing-md;
+        font-size: vars.$font-size-md;
+        font-family: vars.$font-body;
+        border-radius: vars.$spacing-xs;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &.btn-primary {
+          background-color: vars.$color-primary;
+          color: vars.$color-light;
+
+          &:hover {
+            background-color: vars.$color-secondary;
+          }
+        }
+
+        &.btn-secondary {
+          background-color: vars.$color-light;
+          color: vars.$color-dark;
+          border: 1px solid vars.$color-dark;
+
+          &:hover {
+            background-color: vars.$color-primary;
+            color: vars.$color-light;
+          }
+        }
+      }
+    }
+  }
+}

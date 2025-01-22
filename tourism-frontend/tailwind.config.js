@@ -1,31 +1,25 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'], // Paths to all templates
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        primary: '#1D4ED8', // Example: Primary theme color
-        secondary: '#9333EA', // Example: Secondary theme color
-        accent: '#F59E0B', // Example: Accent color for highlights
-        neutral: '#374151', // Neutral gray for backgrounds
-      },
-      spacing: {
-        '128': '32rem', // Custom spacing value
-        '144': '36rem', // Custom spacing value
+        primary: '#006341', // Springbok Green
+        secondary: '#FFB612', // Golden Yellow
+        danger: '#D60000', // Red
+        background: '#F4F4F2', // Neutral Background
+        accent: '#003DA5', // Blue for depth
+        dark: '#000000', // Black
+        light: '#FFFFFF', // White
+        textMuted: '#b0b0b0', // Muted gray for placeholder text
       },
       fontFamily: {
-        sans: ['Inter', 'Arial', 'sans-serif'], // Custom sans-serif font
-        serif: ['Merriweather', 'serif'], // Custom serif font
+        headings: ['Playfair Display', 'serif'], // Heritage-focused
+        body: ['Inter', 'sans-serif'], // Clean and readable
       },
-      borderRadius: {
-        xl: '1.5rem', // Custom border radius
+      backgroundImage: {
+        'rugby-pattern': "url('/src/assets/images/rugby-pattern.jpg')", // Custom background
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'), // Plugin for better form styling
-    require('@tailwindcss/typography'), // Plugin for rich text styling
-    require('@tailwindcss/aspect-ratio'), // Plugin for maintaining aspect ratios
-  ],
+  plugins: [],
 };
-

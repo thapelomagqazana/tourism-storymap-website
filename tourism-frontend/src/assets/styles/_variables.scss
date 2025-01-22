@@ -1,0 +1,38 @@
+// Colors inspired by the "Rugby: A Nation United" theme
+$color-primary: #006341; // Springbok Green
+$color-secondary: #FFB612; // Golden Yellow
+$color-danger: #D60000; // Red
+$color-accent: #003DA5; // Depth Blue
+$color-background: #F4F4F2; // Neutral Background
+$color-dark: #000000; // Black
+$color-light: #FFFFFF; // White
+$color-text-muted: #b0b0b0; // Muted gray
+
+// Fonts
+$font-headings: 'Playfair Display', serif;
+$font-body: 'Inter', sans-serif;
+
+// Font Sizes
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-xxl: 32px;
+$font-size-base: $font-size-md;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Shadows
+$shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+// Breakpoints
+$breakpoint-mobile: 576px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;

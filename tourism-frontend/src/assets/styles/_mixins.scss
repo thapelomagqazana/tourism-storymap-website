@@ -1,0 +1,32 @@
+@use './_variables.scss' as vars;
+
+// Flex Center Mixin
+@mixin flex-between-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Button Primary Mixin
+@mixin button-primary {
+  background-color: vars.$color-primary;
+  color: vars.$color-light;
+  border: none;
+  border-radius: vars.$spacing-xs;
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-md;
+  padding: vars.$spacing-sm vars.$spacing-md;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: vars.$color-secondary;
+    color: vars.$color-dark;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid vars.$color-accent;
+    outline-offset: 2px;
+  }
+}
