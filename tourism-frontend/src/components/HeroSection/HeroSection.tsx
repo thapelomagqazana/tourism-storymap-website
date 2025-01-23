@@ -5,14 +5,13 @@ import mandelaVideo from "../../assets/videos/mandela-rugby.mp4";
 /**
  * HeroSection Component
  *
- * @description
  * Displays a fullscreen hero section with a video background, headline, subtitle, and buttons.
  *
  * @returns {JSX.Element} The hero section component.
  */
 const HeroSection: React.FC = () => {
   return (
-    <section className="hero-section">
+    <section className="hero-section horizontal-scroll-item">
       {/* Fullscreen Video Background */}
       <video className="hero-video" autoPlay muted loop>
         <source src={mandelaVideo} type="video/mp4" />

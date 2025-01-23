@@ -1,47 +1,105 @@
 @use '../assets/styles/_variables.scss' as vars;
 
-.section-title {
-    text-align: center;
-    font-size: vars.$font-size-xl;
-    margin: vars.$spacing-lg 0;
-    color: vars.$color-primary;
+.homepage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: vars.$color-background; // Neutral Background
+  color: vars.$color-dark; // Black text
+  font-family: vars.$font-body;
+  padding: vars.$spacing-lg;
 }
 
-.scroll-item {
-    margin: 0 vars.$spacing-sm;
-    min-width: 250px;
+.slideshow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: vars.$spacing-md;
+  margin-top: vars.$spacing-lg;
+  width: 100%;
+  max-width: vars.$breakpoint-desktop;
 }
 
-.attraction-card {
-    border: 1px solid vars.$color-light;
-    border-radius: vars.$spacing-sm;
-    overflow: hidden;
-    text-align: center;
-    background-color: vars.$color-light;
-    transition: box-shadow 0.3s ease;
+.prev-button,
+.next-button {
+  background-color: vars.$color-primary; // Springbok Green
+  color: vars.$color-light; // White text
+  padding: vars.$spacing-sm vars.$spacing-lg;
+  border: none;
+  border-radius: vars.$spacing-xs;
+  cursor: pointer;
+  font-size: vars.$font-size-lg;
+  font-family: vars.$font-body;
+  box-shadow: vars.$shadow-light;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
-    &:hover {
+  &:hover {
+    background-color: vars.$color-accent; // Depth Blue
     box-shadow: vars.$shadow-medium;
-    }
+  }
+
+  &:focus {
+    outline: 2px solid vars.$color-secondary; // Golden Yellow focus outline
+  }
 }
 
-.attraction-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
+.slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 600px;
+  background-color: vars.$color-light; // White background
+  border: 2px solid vars.$color-primary; // Springbok Green border
+  border-radius: vars.$spacing-sm;
+  box-shadow: vars.$shadow-medium;
+  padding: vars.$spacing-lg;
 
-.attraction-name {
+  h3 {
+    color: vars.$color-primary; // Springbok Green
     font-family: vars.$font-headings;
-    font-size: vars.$font-size-lg;
-    color: vars.$color-dark;
-    margin: vars.$spacing-sm 0;
+    font-size: vars.$font-size-xl;
+    margin-bottom: vars.$spacing-sm;
+  }
+
+  p {
+    color: vars.$color-dark; // Black text
+    font-size: vars.$font-size-md;
+    line-height: 1.6;
+    margin-bottom: vars.$spacing-md;
+  }
+
+  img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: vars.$spacing-sm;
+    margin-bottom: vars.$spacing-lg;
+    box-shadow: vars.$shadow-light;
+  }
 }
 
-.attraction-description {
-    font-family: vars.$font-body;
-    font-size: vars.$font-size-sm;
-    color: vars.$color-text-muted;
-    padding: 0 vars.$spacing-md vars.$spacing-sm;
+// Responsive Design
+@media (max-width: vars.$breakpoint-tablet) {
+  .slideshow {
+    flex-direction: column;
+  }
+
+  .prev-button,
+  .next-button {
+    font-size: vars.$font-size-md;
+    padding: vars.$spacing-xs vars.$spacing-md;
+  }
+
+  .slide-content {
+    padding: vars.$spacing-md;
+
+    h3 {
+      font-size: vars.$font-size-lg;
+    }
+
+    p {
+      font-size: vars.$font-size-sm;
+    }
+  }
 }
-  
+

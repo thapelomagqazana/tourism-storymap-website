@@ -1,77 +1,110 @@
 @use '../../assets/styles/_variables.scss' as vars;
 
+// MapView Component Styles
 .map-view {
-  height: 100vh; // Full viewport height
+  width: 100%;
+  height: auto;
+  margin: vars.$spacing-md 0;
+  border: 2px solid vars.$color-primary; // Springbok Green border
+  border-radius: vars.$spacing-sm;
+  overflow: hidden;
+  box-shadow: vars.$shadow-medium;
   background-color: vars.$color-background;
+}
 
-  .map {
-    width: 100%;
-    height: 100%; // Ensure the map fills its parent container
-    border-radius: vars.$spacing-sm;
-    box-shadow: vars.$shadow-light;
+// Leaflet map container
+.leaflet-container {
+  width: 100%;
+  height: 400px;
+  background-color: vars.$color-background;
+}
+
+// Marker button styles
+.marker-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: 2px solid vars.$color-secondary; // Golden Yellow focus
+  }
+
+  img {
+    width: 25px;
+    height: 41px;
+    transform: translate(-12px, -41px); // Center the marker
+  }
+}
+
+// Popup styles
+.leaflet-popup-content-wrapper {
+  background-color: vars.$color-light; // White background
+  color: vars.$color-dark; // Black text
+  border-radius: vars.$spacing-sm;
+  box-shadow: vars.$shadow-light;
+  font-family: vars.$font-body;
+}
+
+.leaflet-popup-content {
+  padding: vars.$spacing-sm vars.$spacing-md;
+
+  h3 {
+    font-size: vars.$font-size-lg;
+    font-family: vars.$font-headings;
+    color: vars.$color-primary; // Springbok Green for titles
+    margin-bottom: vars.$spacing-xs;
+  }
+
+  p {
+    font-size: vars.$font-size-sm;
+    color: vars.$color-text-muted; // Muted gray for descriptions
+    margin-bottom: vars.$spacing-sm;
+  }
+
+  button {
+    padding: vars.$spacing-xs vars.$spacing-md;
+    font-size: vars.$font-size-sm;
+    background-color: vars.$color-primary; // Springbok Green button
+    color: vars.$color-light; // White text
+    border: none;
+    border-radius: vars.$spacing-xs;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: vars.$color-secondary; // Golden Yellow on hover
+    }
+  }
+}
+
+// Popup arrow override
+.leaflet-popup-tip {
+  background-color: vars.$color-light; // Match popup background
+}
+
+// Responsive adjustments
+@media (max-width: vars.$breakpoint-tablet) {
+  .map-view {
+    border-width: 1px;
+    border-radius: vars.$spacing-xs;
   }
 
   .leaflet-container {
-    width: 100%;
-    height: 100%; // Leaflet container must fill the map
-    border-radius: vars.$spacing-sm;
-    z-index: 100; // Ensure this is lower than the Sidebar's z-index
+    height: 300px; // Reduce height for smaller screens
   }
 
   .leaflet-popup-content {
-    font-family: vars.$font-body;
-    font-size: vars.$font-size-sm;
-    color: vars.$color-dark;
-    line-height: 1.5;
-
-    strong {
-      font-family: vars.$font-headings;
-      color: vars.$color-primary;
-      font-size: vars.$font-size-md;
+    h3 {
+      font-size: vars.$font-size-md; // Slightly smaller title
     }
 
     p {
-      margin: vars.$spacing-xs 0;
+      font-size: vars.$font-size-xs; // Smaller description text
     }
-  }
 
-  .leaflet-popup-tip {
-    background: vars.$color-primary;
-  }
-
-  .leaflet-marker-icon {
-    transition: transform 0.2s ease-in-out;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  .leaflet-control-zoom button {
-    background-color: vars.$color-light;
-    color: vars.$color-dark;
-    border: none;
-    box-shadow: vars.$shadow-light;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: vars.$color-secondary;
-      color: vars.$color-light;
-    }
-  }
-
-  .leaflet-control-attribution {
-    font-family: vars.$font-body;
-    font-size: vars.$font-size-xs;
-    color: vars.$color-text-muted;
-
-    a {
-      color: vars.$color-primary;
-
-      &:hover {
-        color: vars.$color-secondary;
-        text-decoration: underline;
-      }
+    button {
+      font-size: vars.$font-size-xs; // Adjust button size
     }
   }
 }

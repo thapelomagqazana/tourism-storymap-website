@@ -1,54 +1,45 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './MapView.scss';
-import { Attraction } from '../../interfaces/Attraction';
 import L from 'leaflet';
-import trophyIcon from '../../assets/icons/trophy.png'; // Icon for historical events
-import playerIcon from '../../assets/icons/rugby.png';
-import grassrootsIcon from '../../assets/icons/grassroots.png';
+import { Attraction } from '../../interfaces/Attraction';
 
-const icons = {
-  historical: L.icon({
-    iconUrl: trophyIcon,
-    iconSize: [30, 40],
-    iconAnchor: [15, 40],
-    popupAnchor: [0, -40],
-  }),
-  legend: L.icon({
-    iconUrl: playerIcon,
-    iconSize: [30, 40],
-    iconAnchor: [15, 40],
-    popupAnchor: [0, -40],
-  }),
-  grassroots: L.icon({
-    iconUrl: grassrootsIcon,
-    iconSize: [30, 40],
-    iconAnchor: [15, 40],
-    popupAnchor: [0, -40],
-  }),
-};
-
+// Custom marker icon
+const customIcon = new L.Icon({
+  iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Map_marker.svg/585px-Map_marker.svg.png?20150513095621',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
 
 interface MapViewProps {
   attractions: Attraction[];
+  highlightedAttraction?: Attraction | null; // Optional highlighted attraction
   onMarkerClick: (attraction: Attraction) => void;
 }
 
-/**
- * MapView Component
- * Displays an interactive map with attraction markers.
- * @param {Attraction[]} attractions - Array of attraction data.
- * @param {Function} onMarkerClick - Function to handle marker clicks.
- * @returns {JSX.Element} Map with markers and popups.
- */
-const MapView: React.FC<MapViewProps> = ({ attractions, onMarkerClick }) => {
+// Component to dynamically fly the map to a new location
+const FlyToLocation: React.FC<{ center: [number, number]; zoom: number }> = ({ center, zoom }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    map.flyTo(center, zoom, {
+      duration: 1.5, // Animation duration in seconds
+      easeLinearity: 0.25, // Easing function for the animation
+    });
+  }, [center, zoom, map]);
+
+  return null;
+};
+
+const MapView: React.FC<MapViewProps> = ({ attractions, highlightedAttraction, onMarkerClick }) => {
   return (
     <div className="map-view">
       <MapContainer
-        center={[-28.4793, 24.6727]} // Center on South Africa
-        zoom={5}
-        className="map"
+        center={highlightedAttraction?.coordinates || [-30.5595, 22.9375]} // Default to South Africa center
+        zoom={highlightedAttraction ? 10 : 5} // Default zoom
+        scrollWheelZoom={true}
+        style={{ width: '100%', height: '400px' }}
       >
         {/* Map Tiles */}
         <TileLayer
@@ -56,22 +47,48 @@ const MapView: React.FC<MapViewProps> = ({ attractions, onMarkerClick }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Render Markers */}
+        {/* Dynamic Fly-To Animation */}
+        {highlightedAttraction && (
+          <FlyToLocation
+            center={highlightedAttraction.coordinates}
+            zoom={10}
+          />
+        )}
+
+        {/* Highlighted Marker (Pin) */}
+        {highlightedAttraction && (
+          <Marker position={highlightedAttraction.coordinates} icon={customIcon}>
+            <Popup>
+              <h3>{highlightedAttraction.name}</h3>
+              <p>{highlightedAttraction.description}</p>
+            </Popup>
+          </Marker>
+        )}
+
+        {/* All Markers */}
         {attractions.map((attraction) => (
           <Marker
             key={attraction.id}
             position={attraction.coordinates}
-            icon={icons[attraction.type]} // Use the corresponding icon
+            icon={customIcon}
             eventHandlers={{
-              click: () => onMarkerClick(attraction),
+              click: () => {
+                onMarkerClick(attraction);
+              },
             }}
           >
             <Popup>
-              <strong>{attraction.name}</strong>
+              <h3>{attraction.name}</h3>
               <p>{attraction.description}</p>
+              <button
+                onClick={() => {
+                  onMarkerClick(attraction);
+                }}
+              >
+                Learn More
+              </button>
             </Popup>
           </Marker>
-
         ))}
       </MapContainer>
     </div>

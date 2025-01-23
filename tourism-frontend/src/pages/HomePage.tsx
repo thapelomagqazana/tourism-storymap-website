@@ -1,82 +1,104 @@
 import React, { useState } from 'react';
 import MapView from '../components/Map/MapView';
-import Sidebar from '../components/Sidebar/Sidebar';
-import SuggestedTrips from '../components/Trip/SuggestedTrips';
-import HeroSection from '../components/HeroSection/HeroSection';
+import SearchBar from '../components/SearchBar/SearchBar';
 import { Attraction } from '../interfaces/Attraction';
+import './HomePage.scss';
 
 const attractions: Attraction[] = [
   {
     id: 1,
-    name: 'Ellis Park Stadium',
-    description: 'Venue of the iconic 1995 Rugby World Cup final.',
-    entranceFee: 'R150',
-    directions: 'Located in Doornfontein, Johannesburg.',
-    images: ['https://via.placeholder.com/100'],
-    coordinates: [-26.1979, 28.0625],
-    type: 'historical', // Updated type
+    name: 'Newlands Stadium',
+    description: 'Newlands, the oldest rugby stadium in South Africa, hosted the Springboks’ first match in 1891.',
+    entranceFee: 'R100',
+    directions: 'Cape Town, Western Cape',
+    images: [
+      'https://via.placeholder.com/150/0000FF/808080?Text=Newlands1',
+      'https://via.placeholder.com/150/0000FF/808080?Text=Newlands2',
+      'https://via.placeholder.com/150/0000FF/808080?Text=Newlands3',
+    ],
+    video: 'https://www.youtube.com/embed/sample-video1',
+    coordinates: [-33.9706, 18.4687],
+    type: 'historical',
   },
   {
     id: 2,
-    name: 'Zwide Township',
-    description: 'Hometown of Siya Kolisi, South Africa’s first black rugby captain.',
-    entranceFee: 'Free',
-    directions: 'Located in Port Elizabeth, Eastern Cape.',
-    images: ['https://via.placeholder.com/100'],
-    coordinates: [-33.8984, 25.5703],
-    type: 'legend', // Updated type
-  },
-  {
-    id: 3,
-    name: 'Soweto',
-    description: 'A hub for grassroots rugby development and community empowerment.',
-    entranceFee: 'Free',
-    directions: 'Located southwest of Johannesburg.',
-    images: ['https://via.placeholder.com/100'],
-    coordinates: [-26.2485, 27.854],
-    type: 'grassroots', // Updated type
+    name: 'Ellis Park Stadium',
+    description: 'Venue of the iconic 1995 Rugby World Cup final, symbolizing hope and reconciliation.',
+    entranceFee: 'R150',
+    directions: 'Johannesburg, Gauteng',
+    images: [
+      'https://via.placeholder.com/150/FF0000/FFFFFF?Text=EllisPark1',
+      'https://via.placeholder.com/150/FF0000/FFFFFF?Text=EllisPark2',
+      'https://via.placeholder.com/150/FF0000/FFFFFF?Text=EllisPark3',
+    ],
+    video: 'https://www.youtube.com/embed/sample-video2',
+    coordinates: [-26.1979, 28.0625],
+    type: 'historical',
   },
 ];
 
-  
-
 const HomePage: React.FC = () => {
-    const [selectedAttraction, setSelectedAttraction] = useState<any>(null);
-  
-    const handleMarkerClick = (attraction: any) => {
-      setSelectedAttraction(attraction);
-    };
-  
-    const closeSidebar = () => {
-      setSelectedAttraction(null);
-    };
-  
-    const handleAddToTrip = (attraction: any) => {
-      alert(`${attraction.name} has been added to your trip!`);
-    };
-  
-    const handleViewMoreDetails = (attraction: any) => {
-      alert(`Viewing more details about ${attraction.name}.`);
-    };
-  
-    return (
-      <div className="homepage">
-        <HeroSection />
-        <MapView
-          attractions={attractions}
-          onMarkerClick={handleMarkerClick}
-        />
-        {selectedAttraction && (
-          <Sidebar
-            attraction={selectedAttraction}
-            onClose={closeSidebar}
-            onAddToTrip={handleAddToTrip}
-            onViewMoreDetails={handleViewMoreDetails}
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % attractions.length);
+  };
+
+  const handlePreviousSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + attractions.length) % attractions.length);
+  };
+
+  return (
+    <div className="homepage">
+      <SearchBar attractions={attractions} onSearchResult={() => {}} />
+      <div className="slideshow">
+        <button className="prev-button" onClick={handlePreviousSlide}>
+          ← Previous
+        </button>
+        <div className="slide-content">
+          {/* Slide Title */}
+          <h3>{attractions[currentSlide].name}</h3>
+
+          {/* Slide Description */}
+          <p>{attractions[currentSlide].description}</p>
+
+          {/* Image Carousel */}
+          <div className="image-carousel">
+            {attractions[currentSlide].images.map((image, index) => (
+              <img key={index} src={image} alt={`${attractions[currentSlide].name} - ${index + 1}`} />
+            ))}
+          </div>
+
+          {/* Embedded Video */}
+          {attractions[currentSlide].video && (
+            <iframe
+              src={attractions[currentSlide].video}
+              title={`${attractions[currentSlide].name} Video`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          )}
+
+          {/* Map with Highlighted Location */}
+          <MapView
+            attractions={attractions}
+            highlightedAttraction={attractions[currentSlide]} // Highlight current slide location
+            onMarkerClick={() => {}}
           />
-        )}
-        {/* <SuggestedTrips /> */}
+
+          {/* Call-to-Action Buttons */}
+          <div className="cta-buttons">
+            <button className="learn-more-btn">Learn More</button>
+            <button className="add-to-trip-btn">Add to Trip</button>
+          </div>
+        </div>
+        <button className="next-button" onClick={handleNextSlide}>
+          Next →
+        </button>
       </div>
-    );
+    </div>
+  );
 };
 
 export default HomePage;
